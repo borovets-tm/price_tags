@@ -1,0 +1,56 @@
+{% extends 'basic.html' %}
+{% block head_script %}
+    {% if close == 'yes' %}
+    <script>
+        window.close();
+    </script>
+    {% endif %}
+{% endblock %}
+{% block page_content %}
+    <div>
+        <div class="wrap">
+            <div class="Section-content">
+                <div class="Order-block Order-block_OPEN" id="login">
+                    <header class="Section-header Section-header_sm">
+                        <h2 class="Section-title">
+                            Добавление товара
+                        </h2>
+                    </header>
+                    <div class="Cards">
+                        <div class="Card">
+                            {% if product %}
+                                Добавлен товар:<br>
+                                {{ product.title }} - {{ product.price }}руб.
+                            {% else %}
+                                Добавление 1 товара
+                            {% endif %}
+                            <form class="form" method="post">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+                                <button class="btn btn_success Order-btnReg" type="submit">
+                                    Добавить
+                                </button>
+                            </form>
+                        </div>
+                        {% if request.path == '/new_product/' %}
+                            <div class="Card">
+                            {% if numbers_of_product %}
+                                Добавлено товаров: {{ numbers_of_product }}
+                            {% else %}
+                                Добавление товаров из файла
+                            {% endif %}
+                            <form class="form" method="post" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {{ file.file }}
+                                <button class="btn btn_success Order-btnReg" type="submit">
+                                    Загрузить файл
+                                </button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'basic.html' %}
+{% load static %}
+{% block page_content %}
+    <div>
+        <div class="wrap">
+            <div class="Section-content">
+                <div class="Order-block Order-block_OPEN" id="login">
+                    <header class="Section-header Section-header_sm">
+                        <h2 class="Section-title">
+                            Обновление цен из ICQ
+                        </h2>
+                    </header>
+                    {% if product_list %}
+                        <table class="Cards" style="width: 100%">
+                            Цены обновлены:
+                            <tr>
+                                <th class="Card">
+                                    Артикул товара
+                                </th>
+                                <th class="Card">
+                                    Наименование товара
+                                </th>
+                                <th class="Card">
+                                    Цена
+                                </th>
+                                <th class="Card">
+                                    Старая цена
+                                </th>
+                                <th class="Card">
+                                    Цвет ценника
+                                </th>
+                            </tr>
+                            {% for product in product_list %}
+                                <tr>
+                                    <td class="Card">
+                                        {{ product.sku }}
+                                    </td>
+                                    <td class="Card">
+                                        {{ product.title }}
+                                    </td>
+                                    <td class="Card">
+                                        {{ product.price }}
+                                    </td>
+                                    <td class="Card">
+                                        {{ product.old_price }}
+                                    </td>
+                                    <td class="Card"
+                                        {% if product.is_red_price %}style="background: red; color: black"{% endif %}>
+                                        <label class="form-label">
+                                            <script>
+                                                function change(chosen) {
+                                                    window.location = chosen.value;
+                                                }
+                                            </script>
+                                            <select class="form-select" id='is_red_price' onchange="change(this)">
+                                                <option value="{% url 'change_color' product.id 1 %}"
+                                                        {% if  product.is_red_price == 1 %}selected="selected" {% endif %}>
+                                                    Красный ценник
+                                                </option>
+                                                <option value="{% url 'change_color' product.id 0 %}"
+                                                        {% if product.is_red_price == 0 %}selected="selected" {% endif %}>
+                                                    Черный ценник
+                                                </option>
+                                            </select>
+                                        </label>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </table>
+                    {% else %}
+                        <div class="Cards">
+                            <div class="Card" style="width: 150%">
+                                Вставьте текст из ICQ со списком товаров и цен.
+                                <form class="form" method="post">
+                                    {% csrf_token %}
+                                    {{ form.text }}
+                                    <button class="btn btn_success Order-btnReg" type="submit">
+                                        Обновить
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="Card" style="width: 150%; font-size: 60%">
+                                Инструкция<br>
+                                1. Скопируйте присланный текст из ICQ.
+                                <div class="Card-picture">
+                                    <img src="{% static 'steps/step-1.jpg' %}" alt="step-1.jpg"/>
+                                </div>
+                                2. Вставьте текст в поле.
+                                <div class="Card-picture">
+                                    <img src="{% static 'steps/step-2.jpg' %}" alt="step-2.jpg"/>
+                                </div>
+                                3. Удалите пробелы между цифрами в ценах, а также комментарии в тексте.
+                                <div class="Card-picture">
+                                    <img src="{% static 'steps/step-3.jpg' %}" alt="step-3.jpg"/>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

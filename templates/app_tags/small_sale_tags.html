@@ -1,0 +1,32 @@
+{% load static %}
+<tbody style="box-shadow: 0 0 0 0.1mm gray; width: 45mm; height: 33mm; table-layout: fixed; line-height: 0; background-image: url('{% static "signature.png" %}'); background-position: bottom left; background-size: 15mm; background-repeat: no-repeat">
+<tr style="max-height: 9mm; height: 9mm; font-family: 'Condens', sans-serif; margin: 0;">
+	<td colspan="2" style="width: 45mm; max-width: 45mm; color: black; font-weight: bold; text-align: center; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0; font-size: calc(min(45px / {{ tag.old_price|length }} * 13, 45px));">
+		<p style="border-top: 5px solid red; transform: rotate(-0.14rad);"></p>{{ tag.old_price }}
+	</td>
+</tr>
+<tr style="max-height: 15mm; height: 15mm; font-family: 'Condens', sans-serif; margin: 0; background: yellow;">
+	{% if tag.is_red_price %}
+		<td colspan="2" style="width: 45mm; max-width: 45mm; color: red; font-weight: bold; font-size: calc(min(65px / {{ tag.price|length }} * 9, 65px)); text-align: center; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0">
+			{{ tag.price }}
+		</td>
+	{% else %}
+		<td colspan="2" style="width: 45mm; max-width: 45mm; color: black; font-weight: bold; font-size: calc(min(65px / {{ tag.price|length }} * 9, 65px)); text-align: center; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0">
+			{{ tag.price }}
+		</td>
+	{% endif %}
+</tr>
+<tr style="max-height: 3mm; height: 3mm;">
+	<td style="width: 22.5mm; max-width: 22.5mm; text-align: left; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0 0 0 5px; font-size: calc(min(8px / {{ tag.country|length }} * 17, 8px));">
+		{{ tag.country }}
+	</td>
+	<td style="width: 22.5mm; max-width: 22.5mm; text-align: right; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0 5px 0 0; font-size: calc(min(8px / {{ date|length }} * 17, 8px));">
+		{{ date }}
+	</td>
+</tr>
+<tr style="max-height: 5mm; height: 5mm; margin: 0;">
+	<td colspan="2" style="width: 45mm; max-width: 45mm; text-align: center; vertical-align: middle; font-family: 'AvantGardeC', sans-serif; color: black; overflow: hidden; white-space: nowrap; font-weight: bold; font-size: calc(min(26px / {{ tag.title|length }} * 11, 26px)); padding: 0">
+		{{ tag.title }}
+	</td>
+</tr>
+</tbody>

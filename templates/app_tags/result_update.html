@@ -1,0 +1,94 @@
+{% extends 'basic.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block page_content %}
+    <div>
+        <div class="wrap">
+            <div class="Section-content">
+                <div class="Order-block Order-block_OPEN" id="login">
+                    <header class="Section-header Section-header_sm">
+                        <h2 class="Section-title">
+                            Результат обновления
+                        </h2>
+                    </header>
+                    Обновлено товаров: {{ numbers_update_item }} из {{ numbers_product_in_file }}
+                    <table class="Cards" style="width: 100%">
+                        <thead>
+                        <tr>
+                            <th class="Card">
+                                Наименование товара
+                            </th>
+                            <th class="Card">
+                                Цена
+                            </th>
+                            <th class="Card">
+                                Старая цена
+                            </th>
+                            <th class="Card">
+                                Цвет ценника
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for product in product_list %}
+                            <tr>
+                                <td class="Card">
+                                    {{ product.title }}
+                                </td>
+                                <td class="Card">
+                                    {{ product.price }}
+                                </td>
+                                <td class="Card">
+                                    {{ product.old_price }}
+                                </td>
+                                {% if product.is_red_price %}
+                                    <td class="Card" style="background: red; color: black">
+                                        Красный ценник
+                                    </td>
+                                {% else %}
+                                    <td class="Card">
+                                        Черный ценник
+                                    </td>
+                                {% endif %}
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% if product_list_error %}
+                        <div class="Order-footer">
+                            <p style="text-align: center">Товаров не найдено: {{ numbers_errors }}</p>
+                            <table class="Cards">
+                                <tr>
+                                    <th class="Card">
+                                        Артикул
+                                    </th>
+                                    <th class="Card">
+                                        Ошибка
+                                    </th>
+                                </tr>
+                                {% for item in product_list_error %}
+                                    <tr>
+                                        <td class="Card" style="background: yellow; color: black">
+                                            {{ item.sku }}
+                                        </td>
+                                        <td class="Card" style="background: yellow; color: black">
+                                            {{ item.error }}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                            <a class="btn btn_success btn_muted Order-btnReg" style="width: 20%"
+                               href="{% url 'barcode_scanner' %}">
+                                Завершить
+                            </a>
+                            <a class="btn btn_success Order-btnReg" style="width: 20%" href="{% url 'create_product_before_update' %}"
+                               target="_blank">
+                                Добавить
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
