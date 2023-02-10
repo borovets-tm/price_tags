@@ -291,6 +291,18 @@ class AddNewProduct(View):
 		form = ProductForm(request.POST)
 		form_file = ProductsReceiptForm()
 		if form.is_valid():
+			sku = form.cleaned_data.get('sku')
+			product_check = Product.objects.filter(sku=sku)
+			if product_check:
+				return render(
+					request,
+					'app_tags/product_form.html',
+					context={
+						'form': form,
+						'file': form_file,
+						'error': product_check[0]
+					}
+				)
 			added_product = form.save()
 			form = ProductForm()
 			return render(
@@ -326,6 +338,7 @@ class AddNewProduct(View):
 			old_price_index = 0
 			is_red_price_index = 0
 			numbers_of_products = 0
+			numbers_of_products_ok = 0
 			for row in csv_reader:
 				if row[0].endswith('sku'):
 					ean_index = row.index('ean')
@@ -337,17 +350,19 @@ class AddNewProduct(View):
 					is_red_price_index = row.index('is_red_price')
 				else:
 					numbers_of_products += 1
-					Product.objects.create(
-						sku=row[sku_index],
-						ean=row[ean_index],
-						title=row[title_index],
-						country=row[country_index],
-						category=row[category_index],
-						price=row[price_index],
-						old_price=row[old_price_index],
-						is_red_price=row[is_red_price_index],
-						discount_type='Акция !!!'
-					)
+					if not Product.objects.filter(sku=row[sku_index]):
+						numbers_of_products_ok += 1
+						Product.objects.create(
+							sku=row[sku_index],
+							ean=row[ean_index],
+							title=row[title_index],
+							country=row[country_index],
+							category=row[category_index],
+							price=row[price_index],
+							old_price=row[old_price_index],
+							is_red_price=row[is_red_price_index],
+							discount_type='Акция !!!'
+						)
 			form = ProductForm()
 			form_file = ProductsReceiptForm()
 			return render(
@@ -356,7 +371,8 @@ class AddNewProduct(View):
 				context={
 					'form': form,
 					'file': form_file,
-					'numbers_of_product': numbers_of_products
+					'numbers_of_product': numbers_of_products,
+					'numbers_of_products_ok': numbers_of_products_ok
 				}
 			)
 		form = ProductForm()
