@@ -44,20 +44,36 @@
 	</script>
 	<![endif]-->
 </head>
-<body style="width: 21cm; height: 29.7cm; margin: 0; padding: 0">
-<table style="display: flex; flex-wrap: wrap; align-content: start; font-size: 1rem; padding: 5mm; width: 21cm; height: 29.7cm;">
-	{% for tag in big_tags_list %}
-		{% include 'app_tags/big_tags.html' %}
-	{% endfor %}
-	{% for tag in big_sale_tags_list %}
-		{% include 'app_tags/big_sale_tags.html' %}
-	{% endfor %}
-	{% for tag in small_tags_list %}
-		{% include 'app_tags/small_tags.html' %}
-	{% endfor %}
-	{% for tag in small_sale_tags_list %}
-		{% include 'app_tags/small_sale_tags.html' %}
-	{% endfor %}
-</table>
+<body style="width: 21cm; margin: 0; padding: 0">
+{% for pages in pages_tags %}
+	<table style="display: flex; flex-wrap: wrap; align-content: start; font-size: 1rem; padding: 5mm; margin: 0; width: 21cm; page-break-after: always;">
+		{% for tags in pages %}
+			{% if tags.0 == 'big_tags' %}
+				{% include 'app_tags/big_tags.html' %}
+			{% endif %}
+			{% if tags.0 == 'big_sale_tags' %}
+				{% include 'app_tags/big_sale_tags.html' %}
+			{% endif %}
+			{% if tags.0 == 'small_tags' %}
+				{% include 'app_tags/small_tags.html' %}
+			{% endif %}
+			{% if tags.0 == 'small_sale_tags' %}
+				{% include 'app_tags/small_sale_tags.html' %}
+			{% endif %}
+		{% endfor %}
+	</table>
+{% endfor %}
+{#	{% for tag in big_tags_list %}#}
+{#		{% include 'app_tags/big_tags.html' %}#}
+{#	{% endfor %}#}
+{#	{% for tag in big_sale_tags_list %}#}
+{#		{% include 'app_tags/big_sale_tags.html' %}#}
+{#	{% endfor %}#}
+{#	{% for tag in small_tags_list %}#}
+{#		{% include 'app_tags/small_tags.html' %}#}
+{#	{% endfor %}#}
+{#	{% for tag in small_sale_tags_list %}#}
+{#		{% include 'app_tags/small_sale_tags.html' %}#}
+{#	{% endfor %}#}
 </body>
 </html>

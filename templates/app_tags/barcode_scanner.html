@@ -2,110 +2,126 @@
 {% load widget_tweaks %}
 {% load static %}
 {% block page_content %}
-    <div>
-        <div class="wrap">
-            <div class="Section-content">
-                <div class="Order-block Order-block_OPEN" id="login">
-                    <header class="Section-header Section-header_sm">
-                        <h2 class="Section-title">
-                            Сканер штрих-кода
-                        </h2>
-                    </header>
-                    <div class="Cards">
-                        <div class="Card">
-                            <form class="form Cart" id="form_big" method="post">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <img style="height: 30mm;" src="{% static 'tags/big.jpg' %}" alt="big.jpg"/>
-                                    <label class="form-label" for="ean">
-                                        EAN \ Название
-                                    </label>
-                                    {% for barcode in barcode_for_big_tags %}
-                                        {{ barcode }}<br>
-                                    {% endfor %}
-                                    <input type="hidden" name="size" value="BIG">
-                                    {% if size == 'BIG' %}
-                                        {{ form.ean|attr:"autofocus" }}
-                                    {% else %}
-                                        {{ form.ean }}
-                                    {% endif %}
-                                </div>
-                            </form>
-                        </div>
-                        <div class="Card">
-                            <form class="form Cart" id="form_big_sale" method="post">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <img style="height: 30mm;" src="{% static 'tags/big-sale.jpg' %}" alt="big.jpg"/>
-                                    <label class="form-label" for="ean">
-                                        EAN \ Название
-                                    </label>
-                                    {% for barcode in barcode_for_big_sale_tags %}
-                                        {{ barcode }}<br>
-                                    {% endfor %}
-                                    <input type="hidden" name="size" value="BIG_SALE">
-                                    {% if size == 'BIG_SALE' %}
-                                        {{ form.ean|attr:"autofocus" }}
-                                    {% else %}
-                                        {{ form.ean }}
-                                    {% endif %}
-                                </div>
-                            </form>
-                        </div>
-                        <div class="Card">
-                            <form class="form Cart" id="form_small" method="post">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <img style="height: 30mm;" src="{% static 'tags/small.jpg' %}" alt="big.jpg"/>
-                                    <label class="form-label" for="ean">
-                                        EAN \ Название
-                                    </label>
-                                    {% for barcode in barcode_for_small_tags %}
-                                        {{ barcode }}<br>
-                                    {% endfor %}
-                                    <input type="hidden" name="size" value="SMALL">
-                                    {% if size == 'SMALL' %}
-                                        {{ form.ean|attr:"autofocus" }}
-                                    {% else %}
-                                        {{ form.ean }}
-                                    {% endif %}
-                                </div>
-                            </form>
-                        </div>
-                        <div class="Card">
-                            <form class="form Cart" id="form_small_sale" method="post">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <img style="height: 30mm;" src="{% static 'tags/small-sale.jpg' %}"
-                                         alt="big.jpg"/>
-                                    <label class="form-label" for="ean">
-                                        EAN \ Название
-                                    </label>
-                                    {% for barcode in barcode_for_small_sale_tags %}
-                                        {{ barcode }}<br>
-                                    {% endfor %}
-                                    <input type="hidden" name="size" value="SMALL_SALE">
-                                    {% if size == 'SMALL_SALE' %}
-                                        {{ form.ean|attr:"autofocus" }}
-                                    {% else %}
-                                        {{ form.ean }}
-                                    {% endif %}
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="Order-footer">
-                        <a class="btn btn_success btn_muted Order-btnReg" style="width: 20%"
-                           href="{% url 'barcode_scanner' %}">
-                            Очистить
-                        </a>
-                        <a class="btn btn_success Order-btnReg" style="width: 20%" href="{% url 'print_tags' %}"
-                           target="_blank">
-                            Сформировать
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div>
+		<div class="wrap">
+			<div class="Section-content">
+				<div class="Order-block Order-block_OPEN" id="login">
+					<header class="Section-header Section-header_sm">
+						<h2 class="Section-title">
+							Сканер штрих-кода
+						</h2>
+					</header>
+					<div class="Cards">
+						<div class="Card">
+							<form class="form Cart" id="form_big" method="post">
+								{% csrf_token %}
+								<div class="form-group">
+									<img style="height: 30mm;" src="{% static 'tags/big.jpg' %}" alt="big.jpg"/>
+									<label class="form-label" for="ean">
+										EAN \ Название
+									</label>
+									Отсканировано: {{ barcode_for_big_tags }}<br>
+									Последний добавленный:<br>
+									{% if size == 'BIG' %}
+										{{ last_enter }}
+									{% else %}
+										-
+									{% endif %}
+									<input type="hidden" name="size" value="BIG">
+									{% if size == 'BIG' %}
+										{{ form.ean|attr:"autofocus" }}
+									{% else %}
+										{{ form.ean }}
+									{% endif %}
+								</div>
+							</form>
+						</div>
+						<div class="Card">
+							<form class="form Cart" id="form_big_sale" method="post">
+								{% csrf_token %}
+								<div class="form-group">
+									<img style="height: 30mm;" src="{% static 'tags/big-sale.jpg' %}" alt="big.jpg"/>
+									<label class="form-label" for="ean">
+										EAN \ Название
+									</label>
+									Отсканировано: {{ barcode_for_big_sale_tags }}<br>
+									Последний добавленный:<br>
+									{% if size == 'BIG_SALE' %}
+										{{ last_enter }}
+									{% else %}
+										-
+									{% endif %}
+									<input type="hidden" name="size" value="BIG_SALE">
+									{% if size == 'BIG_SALE' %}
+										{{ form.ean|attr:"autofocus" }}
+									{% else %}
+										{{ form.ean }}
+									{% endif %}
+								</div>
+							</form>
+						</div>
+						<div class="Card">
+							<form class="form Cart" id="form_small" method="post">
+								{% csrf_token %}
+								<div class="form-group">
+									<img style="height: 30mm;" src="{% static 'tags/small.jpg' %}" alt="big.jpg"/>
+									<label class="form-label" for="ean">
+										EAN \ Название
+									</label>
+									Отсканировано: {{ barcode_for_small_tags }}<br>
+									Последний добавленный:<br>
+									{% if size == 'SMALL' %}
+										{{ last_enter }}
+									{% else %}
+										-
+									{% endif %}
+									<input type="hidden" name="size" value="SMALL">
+									{% if size == 'SMALL' %}
+										{{ form.ean|attr:"autofocus" }}
+									{% else %}
+										{{ form.ean }}
+									{% endif %}
+								</div>
+							</form>
+						</div>
+						<div class="Card">
+							<form class="form Cart" id="form_small_sale" method="post">
+								{% csrf_token %}
+								<div class="form-group">
+									<img style="height: 30mm;" src="{% static 'tags/small-sale.jpg' %}"
+									     alt="big.jpg"/>
+									<label class="form-label" for="ean">
+										EAN \ Название
+									</label>
+									Отсканировано: {{ barcode_for_small_sale_tags }}<br>
+									Последний добавленный:<br>
+									{% if size == 'SMALL_SALE' %}
+										{{ last_enter }}
+									{% else %}
+										-
+									{% endif %}
+									<input type="hidden" name="size" value="SMALL_SALE">
+									{% if size == 'SMALL_SALE' %}
+										{{ form.ean|attr:"autofocus" }}
+									{% else %}
+										{{ form.ean }}
+									{% endif %}
+								</div>
+							</form>
+						</div>
+					</div>
+					<div class="Order-footer">
+						<a class="btn btn_success btn_muted Order-btnReg" style="width: 20%"
+						   href="{% url 'barcode_scanner' %}">
+							Очистить
+						</a>
+						<a class="btn btn_success Order-btnReg" style="width: 20%" href="{% url 'print_tags' %}"
+						   target="_blank">
+							Сформировать
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

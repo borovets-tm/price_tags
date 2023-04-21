@@ -1,30 +1,30 @@
 {% load static %}
 <tbody style="box-shadow: 0 0 0 0.1mm gray; width: 90mm; height: 45mm; table-layout: fixed; line-height: 0; background-image: url('{% static "signature.png" %}'); background-position: bottom left; background-size: 15mm; background-repeat: no-repeat">
 <tr style="height: 8mm">
-	<td colspan="2" style="width: 90mm; max-width: 90mm; overflow: hidden; white-space: nowrap; font-family: 'Arial Cyr', sans-serif; text-align: center; vertical-align: middle; font-size: calc(min(16px / {{ tag.category|length }} * 38, 16px)); padding: 0">
-		{{ tag.category }}
+	<td colspan="2" style="width: 90mm; max-width: 90mm; overflow: hidden; white-space: nowrap; font-family: 'Arial Cyr', sans-serif; text-align: center; vertical-align: middle; font-size: calc(min(16px / {{ tags.1.category|length }} * 38, 16px)); padding: 0">
+		{{ tags.1.category }}
 	</td>
 </tr>
 <tr style="height: 10mm">
-	<td style="width: 90mm; max-width: 90mm; text-align: center; vertical-align: middle; font-family: 'AvantGardeC', sans-serif; color: blue; overflow: hidden; white-space: nowrap; font-weight: bold; font-size: calc(min(40px / {{ tag.title|length }} * 14, 40px)); padding: 0"
+	<td style="width: 90mm; max-width: 90mm; text-align: center; vertical-align: middle; font-family: 'AvantGardeC', sans-serif; color: blue; overflow: hidden; white-space: nowrap; font-weight: bold; font-size: calc(min(40px / {{ tags.1.title|length }} * 14, 40px)); padding: 0"
 	    colspan="2">
-		{{ tag.title }}
+		{{ tags.1.title }}
 	</td>
 </tr>
 <tr style="height: 20mm; font-family: 'AvantGardeC', sans-serif;">
-	{% if tag.is_red_price %}
-		<td colspan="2" style="width: 90mm; max-width: 90mm; color: red; font-weight: bold; font-size: calc(min(70px / {{ tag.price|length }} * 9, 70px)); text-align: center; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0">
-			{{ tag.price }}
+	{% if tags.1.is_red_price %}
+		<td colspan="2" style="width: 90mm; max-width: 90mm; color: red; font-weight: bold; font-size: calc(min(70px / {{ tags.1.price|length }} * 9, 70px)); text-align: center; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0">
+			{{ tags.1.price }}
 		</td>
 	{% else %}
-		<td colspan="2" style="width: 90mm; max-width: 90mm; color: black; font-weight: bold; font-size: calc(min(70px / {{ tag.price|length }} * 9, 70px)); text-align: center; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0">
-			{{ tag.price }}
+		<td colspan="2" style="width: 90mm; max-width: 90mm; color: black; font-weight: bold; font-size: calc(min(70px / {{ tags.1.price|length }} * 9, 70px)); text-align: center; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0">
+			{{ tags.1.price }}
 		</td>
 	{% endif %}
 </tr>
 <tr style="height: 7mm;">
-	<td style="width: 45mm; max-width: 45mm; font-max-size: 1em; text-align: left; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0 0 0 5px; font-size: calc(min(12px / {{ tag.country|length }} * 26, 12px));">
-		{{ tag.country }}
+	<td style="width: 45mm; max-width: 45mm; font-max-size: 1em; text-align: left; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0 0 0 5px; font-size: calc(min(12px / {{ tags.1.country|length }} * 26, 12px));">
+		{{ tags.1.country }}
 	</td>
 	<td style="width: 45mm; max-width: 45mm; font-max-size: 1em; text-align: right; vertical-align: middle; overflow: hidden; white-space: nowrap; padding: 0 5px 0 0; font-size: calc(min(12px / {{ date|length }} * 26, 12px));">
 		{{ date }}

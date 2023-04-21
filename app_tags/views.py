@@ -1,4 +1,4 @@
-import os
+﻿import os
 from _csv import reader
 
 from django.shortcuts import render
@@ -45,6 +45,7 @@ class BarcodeScannerView(View):
 	def post(self, request):
 		form = BarcodeForm(request.POST)
 		size = request.POST.get('size')
+		data = ''
 		if form.is_valid():
 			data = form.cleaned_data.get('ean')
 			FILE_TAGS = FILE_LIST[SIZE_LIST.index(size)]
@@ -52,13 +53,13 @@ class BarcodeScannerView(View):
 				print(data, file=file)
 		form = BarcodeForm()
 		with open(BIG_FILE, 'r') as file:
-			barcode_for_big_tags = file.readlines()
+			barcode_for_big_tags = len(file.readlines()) - 1
 		with open(BIG_SALE_FILE, 'r') as file:
-			barcode_for_big_sale_tags = file.readlines()
+			barcode_for_big_sale_tags = len(file.readlines()) - 1
 		with open(SMALL_FILE, 'r') as file:
-			barcode_for_small_tags = file.readlines()
+			barcode_for_small_tags = len(file.readlines()) - 1
 		with open(SMALL_SALE_FILE, 'r') as file:
-			barcode_for_small_sale_tags = file.readlines()
+			barcode_for_small_sale_tags = len(file.readlines()) - 1
 		return render(
 			request,
 			'app_tags/barcode_scanner.html',
@@ -68,12 +69,15 @@ class BarcodeScannerView(View):
 				'barcode_for_big_sale_tags': barcode_for_big_sale_tags,
 				'barcode_for_small_tags': barcode_for_small_tags,
 				'barcode_for_small_sale_tags': barcode_for_small_sale_tags,
+				'last_enter': data,
 				'size': size
 			}
 		)
 
-
 def print_tags(request):
+	max_height = 290
+	max_weight = 180
+	# 53280 4050 1035
 	product_list = Product.objects.all()
 	date = datetime.today().strftime('%d.%m.%Y')
 	with open(BIG_FILE, 'r') as file:
@@ -116,36 +120,62 @@ def print_tags(request):
 			barcode_for_small_sale_tags = list(map(int, ean)) + [
 				product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
 			]
-	big_tags_list = [
-		product_list.get(ean=ean) for ean in barcode_for_big_tags if product_list.filter(ean=ean)
-	]
-	big_sale_tags_list = [
-		product_list.get(ean=ean) for ean in barcode_for_big_sale_tags if product_list.filter(ean=ean)
-	]
-	small_tags_list = [
-		product_list.get(ean=ean) for ean in barcode_for_small_tags if product_list.filter(ean=ean)
-	]
-	small_sale_tags_list = [
-		product_list.get(ean=ean) for ean in barcode_for_small_sale_tags if product_list.filter(ean=ean)
-	]
+	tags_list = []
+	tags_list.extend([
+		['big_tags', product_list.get(ean=ean)] for ean in barcode_for_big_tags if product_list.filter(ean=ean)
+	])
+	tags_list.extend([
+		['big_sale_tags', product_list.get(ean=ean)] for ean in barcode_for_big_sale_tags if product_list.filter(
+			ean=ean
+		)
+	])
+	tags_list.extend([
+		['small_tags', product_list.get(ean=ean)] for ean in barcode_for_small_tags if product_list.filter(ean=ean)
+	])
+	tags_list.extend([
+		['small_sale_tags', product_list.get(ean=ean)] for ean in barcode_for_small_sale_tags if product_list.filter(
+			ean=ean
+		)
+	])
+	pages_tags = [[]]
+	height = 0
+	weight = 0
+	for tags in tags_list:
+		print(tags[0], weight, height)
+		pages_tags[-1].append(tags)
+		if tags[0] in ('big_tags', 'big_sale_tags'):
+			weight += 90
+			if weight == max_weight:
+				height += 45
+				weight = 0
+			if height + 45 > max_height:
+				pages_tags.append([])
+				print('----------------------------------')
+				height = 0
+		else:
+			weight += 45
+			if weight == max_weight:
+				height += 33
+				weight = 0
+			if height + 33 > max_height:
+				pages_tags.append([])
+				print('----------------------------------')
+				height = 0
 	return render(
 		request,
 		'app_tags/print_tags.html',
 		context={
-			'big_tags_list': big_tags_list,
-			'big_sale_tags_list': big_sale_tags_list,
-			'small_tags_list': small_tags_list,
-			'small_sale_tags_list': small_sale_tags_list,
+			'pages_tags': pages_tags,
 			'date': date
 		}
 	)
-
 
 class ProductsReceiptView(View):
 	product_list_error = []
 
 	def get(self, request):
 		form = ProductsReceiptForm()
+		self.product_list_error.clear()
 		return render(
 			request,
 			'app_tags/products_receipt.html',

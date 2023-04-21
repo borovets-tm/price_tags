@@ -3489,9 +3489,9 @@ a.Cart-title {
 
 .Middle-top {
     background-color: #f3f4f9;
-    margin-bottom: 91px;
-    padding-top: 50px;
-    padding-bottom: 50px;
+    /*margin-bottom: 91px;*/
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
 
 .Middle-title {
@@ -3525,7 +3525,7 @@ a.Cart-title {
     }
 
     .Middle-header .Middle-breadcrumbs {
-        margin-top: 20px;
+        /*margin-top: 20px;*/
         margin-left: 28px;
     }
 }
