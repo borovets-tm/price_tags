@@ -1034,6 +1034,11 @@ select + select {
     margin-bottom: 5px;
 }
 
+.helptext {
+    color: #f9bdc4;
+    font-size: 14px;
+}
+
 .form-label:focus {
     outline: none;
 }

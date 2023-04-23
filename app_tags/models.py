@@ -65,26 +65,31 @@ class Product(models.Model):
 		null=True,
 		blank=True,
 		unique=True,
-		verbose_name='номенклатура'
+		verbose_name='номенклатура(sku/sap)',
+		help_text='IERM7.WW2'
 	)
 	ean = models.IntegerField(
 		unique=True,
-		verbose_name='EAN/Штрихкод'
+		verbose_name='EAN/Штрихкод',
+		help_text='4548736081680'
 	)
 	title = models.CharField(
 		max_length=200,
-		verbose_name='наименование товара'
+		verbose_name='наименование товара',
+		help_text='IER-M7'
 	)
 	country = models.CharField(
 		max_length=30,
 		verbose_name='страна производства',
 		choices=COUNTRY,
-		default='VIETNAM'
+		default='Вьетнам',
+		help_text='Китай'
 	)
 	category = models.CharField(
 		max_length=30,
 		verbose_name='категория товара',
-		choices=CATEGORY
+		choices=CATEGORY,
+		help_text='наушники'
 	)
 	old_price = models.IntegerField(
 		verbose_name='старая цена',
