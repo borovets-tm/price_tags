@@ -1,49 +1,62 @@
 ﻿import os
 from _csv import reader
-
-from django.shortcuts import render
-from django.views import View
-from django.core.exceptions import ObjectDoesNotExist
-
 from datetime import datetime
 
-from app_tags.forms import BarcodeForm, ProductsReceiptForm, ProductForm, UpdatePriceForm
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
+from django.views import View
+
+from app_tags.forms import BarcodeForm, ProductsReceiptForm, ProductForm, UpdatePriceForm, AddPriceTagsByMarkdown
 from app_tags.models import Product
 from price_tags.settings import BASE_DIR
-
 
 BIG_FILE = os.path.join(BASE_DIR, 'static', 'price_tag_list', 'big.txt')
 BIG_SALE_FILE = os.path.join(BASE_DIR, 'static', 'price_tag_list', 'big_sale.txt')
 SMALL_FILE = os.path.join(BASE_DIR, 'static', 'price_tag_list', 'small.txt')
 SMALL_SALE_FILE = os.path.join(BASE_DIR, 'static', 'price_tag_list', 'small_sale.txt')
-FILE_LIST = [BIG_FILE, BIG_SALE_FILE, SMALL_FILE, SMALL_SALE_FILE]
-SIZE_LIST = ['BIG', 'BIG_SALE', 'SMALL', 'SMALL_SALE']
+FREE_TAGS_SMALL = os.path.join(BASE_DIR, 'static', 'price_tag_list', 'free_tags_small.txt')
+FREE_TAGS_BIG = os.path.join(BASE_DIR, 'static', 'price_tag_list', 'free_tags_big.txt')
+FILE_LIST = [BIG_FILE, BIG_SALE_FILE, FREE_TAGS_BIG, SMALL_FILE, SMALL_SALE_FILE, FREE_TAGS_SMALL]
+SIZE_LIST = ['BIG', 'BIG_SALE', 'FREE_BIG', 'SMALL', 'SMALL_SALE', 'FREE_SMALL']
 UPDATE_ERRORS = []
 
 
 class BarcodeScannerView(View):
 
-	def get(self, request):
+	@classmethod
+	def get(cls, request):
 		UPDATE_ERRORS.clear()
-		with open(BIG_FILE, 'w') as file:
-			print('', file=file)
-		with open(BIG_SALE_FILE, 'w') as file:
-			print('', file=file)
-		with open(SMALL_FILE, 'w') as file:
-			print('', file=file)
-		with open(SMALL_SALE_FILE, 'w') as file:
-			print('', file=file)
+		for file_tags in FILE_LIST:
+			with open(file_tags, 'w') as file:
+				print(file=file)
 		form = BarcodeForm()
+		free_form = AddPriceTagsByMarkdown()
 		return render(
 			request,
 			'app_tags/barcode_scanner.html',
 			context={
 				'form': form,
+				'free_form': free_form
 			}
 		)
 
-	def post(self, request):
+	@classmethod
+	def post(cls, request):
+		barcode_for_big_tags = 0
+		barcode_for_big_sale_tags = 0
+		barcode_for_small_tags = 0
+		barcode_for_small_sale_tags = 0
+		numbers_free_tags = 0
+		numbers_list = [
+			'barcode_for_big_tags',
+			'barcode_for_big_sale_tags',
+			'numbers_free_tags',
+			'barcode_for_small_tags',
+			'barcode_for_small_sale_tags',
+			'numbers_free_tags'
+		]
 		form = BarcodeForm(request.POST)
+		free_form = AddPriceTagsByMarkdown(request.POST)
 		size = request.POST.get('size')
 		data = ''
 		if form.is_valid():
@@ -51,98 +64,141 @@ class BarcodeScannerView(View):
 			FILE_TAGS = FILE_LIST[SIZE_LIST.index(size)]
 			with open(FILE_TAGS, 'a', encoding='utf-8') as file:
 				print(data, file=file)
+		elif free_form.is_valid():
+			free_data = free_form.cleaned_data
+			file = FREE_TAGS_SMALL if free_data.get('size_of_tags') == '0' else FREE_TAGS_BIG
+			with open(file, 'a', encoding='utf-8') as file:
+				title = free_data.get('title')
+				category = free_data.get('category').title
+				country = free_data.get('country').title
+				old_price = free_data.get('old_price')
+				price = free_data.get('price')
+				discount_type = free_data.get('discount_type')
+				is_red_price = '1' if free_data.get('is_red_price') else '0'
+				free_data = ','.join([title, category, country, old_price, price, discount_type, is_red_price])
+				print(free_data, file=file)
 		form = BarcodeForm()
-		with open(BIG_FILE, 'r') as file:
-			barcode_for_big_tags = len(file.readlines()) - 1
-		with open(BIG_SALE_FILE, 'r') as file:
-			barcode_for_big_sale_tags = len(file.readlines()) - 1
-		with open(SMALL_FILE, 'r') as file:
-			barcode_for_small_tags = len(file.readlines()) - 1
-		with open(SMALL_SALE_FILE, 'r') as file:
-			barcode_for_small_sale_tags = len(file.readlines()) - 1
+		free_form = AddPriceTagsByMarkdown()
+		context = {
+			'form': form,
+			'free_form': free_form,
+			'barcode_for_big_tags': barcode_for_big_tags,
+			'barcode_for_big_sale_tags': barcode_for_big_sale_tags,
+			'barcode_for_small_tags': barcode_for_small_tags,
+			'barcode_for_small_sale_tags': barcode_for_small_sale_tags,
+			'last_enter': data,
+			'size': size,
+			'numbers_free_tags': numbers_free_tags
+		}
+		for file_tags in FILE_LIST:
+			with open(file_tags, 'r') as file:
+				context[numbers_list[FILE_LIST.index(file_tags)]] += len(file.readlines()) - 1
 		return render(
 			request,
 			'app_tags/barcode_scanner.html',
-			context={
-				'form': form,
-				'barcode_for_big_tags': barcode_for_big_tags,
-				'barcode_for_big_sale_tags': barcode_for_big_sale_tags,
-				'barcode_for_small_tags': barcode_for_small_tags,
-				'barcode_for_small_sale_tags': barcode_for_small_sale_tags,
-				'last_enter': data,
-				'size': size
-			}
+			context=context
 		)
+
 
 def print_tags(request):
 	max_height = 290
 	max_weight = 180
-	# 53280 4050 1035
 	product_list = Product.objects.all()
 	date = datetime.today().strftime('%d.%m.%Y')
-	with open(BIG_FILE, 'r') as file:
-		data = file.read().strip('\n ').split('\n')
-		ean = [item for item in data if item.isdigit()]
-		title = [item for item in data if not item.isdigit()]
-		if data[0] == '':
-			barcode_for_big_tags = []
-		else:
-			barcode_for_big_tags = list(map(int, ean)) + [
-				product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
-			]
-	with open(BIG_SALE_FILE, 'r') as file:
-		data = file.read().strip('\n ').split('\n')
-		ean = [item for item in data if item.isdigit()]
-		title = [item for item in data if not item.isdigit()]
-		if data[0] == '':
-			barcode_for_big_sale_tags = []
-		else:
-			barcode_for_big_sale_tags = list(map(int, ean)) + [
-				product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
-			]
-	with open(SMALL_FILE, 'r') as file:
-		data = file.read().strip('\n ').split('\n')
-		ean = [item for item in data if item.isdigit()]
-		title = [item for item in data if not item.isdigit()]
-		if data[0] == '':
-			barcode_for_small_tags = []
-		else:
-			barcode_for_small_tags = list(map(int, ean)) + [
-				product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
-			]
-	with open(SMALL_SALE_FILE, 'r') as file:
-		data = file.read().strip('\n ').split('\n')
-		ean = [item for item in data if item.isdigit()]
-		title = [item for item in data if not item.isdigit()]
-		if data[0] == '':
-			barcode_for_small_sale_tags = []
-		else:
-			barcode_for_small_sale_tags = list(map(int, ean)) + [
-				product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
-			]
 	tags_list = []
-	tags_list.extend([
-		['big_tags', product_list.get(ean=ean)] for ean in barcode_for_big_tags if product_list.filter(ean=ean)
-	])
-	tags_list.extend([
-		['big_sale_tags', product_list.get(ean=ean)] for ean in barcode_for_big_sale_tags if product_list.filter(
-			ean=ean
-		)
-	])
-	tags_list.extend([
-		['small_tags', product_list.get(ean=ean)] for ean in barcode_for_small_tags if product_list.filter(ean=ean)
-	])
-	tags_list.extend([
-		['small_sale_tags', product_list.get(ean=ean)] for ean in barcode_for_small_sale_tags if product_list.filter(
-			ean=ean
-		)
-	])
+	order_list = ['big_tags', 'big_sale_tags', 'free_tags_big', 'small_tags', 'small_sale_tags', 'free_tags_small']
+	for file_tags in FILE_LIST:
+		with open(file_tags, 'r', encoding='utf-8') as file:
+			data = file.read().strip('\n ').split('\n')
+			if file_tags not in [FREE_TAGS_BIG, FREE_TAGS_SMALL]:
+				ean = [item for item in data if item.isdigit()]
+				title = [item for item in data if not item.isdigit()]
+				if data[0] != '':
+					barcode = list(map(int, ean)) + [
+						product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
+					]
+					tags_list.extend(
+						[
+							[order_list[FILE_LIST.index(file_tags)], product_list.get(ean=ean)] for ean in barcode if
+							product_list.filter(ean=ean)
+						]
+					)
+			else:
+				if data[0] != '':
+					for line in data:
+						tag = dict()
+						line = line.split(',')
+						tag['title'] = line[0]
+						tag['category'] = line[1]
+						tag['country'] = line[2]
+						tag['old_price'] = int(line[3])
+						tag['price'] = int(line[4])
+						tag['discount_type'] = line[5]
+						tag['is_red_price'] = bool(line[6])
+						tags_list.append([order_list[FILE_LIST.index(file_tags)], tag])
+
+	# with open(BIG_FILE, 'r') as file:
+	# 	data = file.read().strip('\n ').split('\n')
+	# 	ean = [item for item in data if item.isdigit()]
+	# 	title = [item for item in data if not item.isdigit()]
+	# 	if data[0] == '':
+	# 		barcode_for_big_tags = []
+	# 	else:
+	# 		barcode_for_big_tags = list(map(int, ean)) + [
+	# 			product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
+	# 		]
+	# with open(BIG_SALE_FILE, 'r') as file:
+	# 	data = file.read().strip('\n ').split('\n')
+	# 	ean = [item for item in data if item.isdigit()]
+	# 	title = [item for item in data if not item.isdigit()]
+	# 	if data[0] == '':
+	# 		barcode_for_big_sale_tags = []
+	# 	else:
+	# 		barcode_for_big_sale_tags = list(map(int, ean)) + [
+	# 			product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
+	# 		]
+	# with open(SMALL_FILE, 'r') as file:
+	# 	data = file.read().strip('\n ').split('\n')
+	# 	ean = [item for item in data if item.isdigit()]
+	# 	title = [item for item in data if not item.isdigit()]
+	# 	if data[0] == '':
+	# 		barcode_for_small_tags = []
+	# 	else:
+	# 		barcode_for_small_tags = list(map(int, ean)) + [
+	# 			product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
+	# 		]
+	# with open(SMALL_SALE_FILE, 'r') as file:
+	# 	data = file.read().strip('\n ').split('\n')
+	# 	ean = [item for item in data if item.isdigit()]
+	# 	title = [item for item in data if not item.isdigit()]
+	# 	if data[0] == '':
+	# 		barcode_for_small_sale_tags = []
+	# 	else:
+	# 		barcode_for_small_sale_tags = list(map(int, ean)) + [
+	# 			product.ean for product in [product_list.filter(title__iexact=item).first() for item in title]
+	# 		]
+	# tags_list.extend([
+	# 	['big_tags', product_list.get(ean=ean)] for ean in barcode_for_big_tags if product_list.filter(ean=ean)
+	# ])
+	# tags_list.extend([
+	# 	['big_sale_tags', product_list.get(ean=ean)] for ean in barcode_for_big_sale_tags if product_list.filter(
+	# 		ean=ean
+	# 	)
+	# ])
+	# tags_list.extend([
+	# 	['small_tags', product_list.get(ean=ean)] for ean in barcode_for_small_tags if product_list.filter(ean=ean)
+	# ])
+	# tags_list.extend([
+	# 	['small_sale_tags', product_list.get(ean=ean)] for ean in barcode_for_small_sale_tags if product_list.filter(
+	# 		ean=ean
+	# 	)
+	# ])
 	pages_tags = [[]]
 	height = 0
 	weight = 0
 	for tags in tags_list:
 		pages_tags[-1].append(tags)
-		if tags[0] in ('big_tags', 'big_sale_tags'):
+		if tags[0] in ('big_tags', 'big_sale_tags', 'free_tags_big'):
 			weight += 90
 			if weight == max_weight:
 				height += 45
@@ -166,6 +222,7 @@ def print_tags(request):
 			'date': date
 		}
 	)
+
 
 class ProductsReceiptView(View):
 	product_list_error = []
@@ -242,7 +299,8 @@ class ProductsReceiptView(View):
 
 class ProductCreateBeforeUpdateView(View):
 
-	def get(self, request):
+	@classmethod
+	def get(cls, request):
 		item = UPDATE_ERRORS[0]
 		form = ProductForm(
 			initial={
@@ -261,7 +319,8 @@ class ProductCreateBeforeUpdateView(View):
 			}
 		)
 
-	def post(self, request):
+	@classmethod
+	def post(cls, request):
 		form = ProductForm(request.POST)
 		if form.is_valid():
 			form.save()
@@ -302,7 +361,8 @@ class ProductCreateBeforeUpdateView(View):
 
 class AddNewProduct(View):
 
-	def get(self, request):
+	@classmethod
+	def get(cls, request):
 		form = ProductForm()
 		form_file = ProductsReceiptForm()
 		return render(
@@ -314,7 +374,8 @@ class AddNewProduct(View):
 			}
 		)
 
-	def post(self, request):
+	@classmethod
+	def post(cls, request):
 		form = ProductForm(request.POST)
 		form_file = ProductsReceiptForm()
 		if form.is_valid():
@@ -350,7 +411,8 @@ class AddNewProduct(View):
 			}
 		)
 
-	def multy_add_product(self, request):
+	@classmethod
+	def multy_add_product(cls, request):
 		form = ProductsReceiptForm(request.POST, request.FILES)
 		if form.is_valid():
 			file = form.cleaned_data['file'].read().strip()

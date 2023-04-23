@@ -2633,10 +2633,7 @@ a.Cart-title {
     visibility: visible;
     width: 100%;
     background: #f5f5f5;
-    padding-top: 7px;
-    padding-bottom: 16px;
-    padding-left: 13px;
-    margin-bottom: 19px;
+    padding-bottom: 15px;
 }
 
 @media screen and (max-width: 990px) {
@@ -3606,7 +3603,7 @@ a.Cart-title {
 }
 
 .Order-footer {
-    margin-top: 20px;
+    margin-top: 10px;
     text-align: right;
 }
 
@@ -4773,7 +4770,7 @@ a.Cart-title {
 }
 
 .Section-title {
-    margin-bottom: 28px;
+    margin-bottom: 10px;
     color: #878a91;
     font-size: 20px;
     font-weight: 600;
@@ -4815,8 +4812,8 @@ a.Cart-title {
     position: relative;
     display: flex;
     align-items: center;
-    margin-bottom: 54px;
-    margin-top: 23px;
+    margin-bottom: 10px;
+    margin-top: 15px;
     background: url("../img/bg/lineHeaderSection.png") 0 center repeat-x;
 }
 
@@ -4826,7 +4823,7 @@ a.Cart-title {
 }
 
 .Section-header_sm {
-    margin-bottom: 48px;
+    margin-bottom: 10px;
 }
 
 .Section-header_sm .Section-title {
