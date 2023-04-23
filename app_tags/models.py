@@ -12,52 +12,36 @@ COUNTRY = (
 			('Филиппины', 'Филиппины'),
 			('Япония', 'Япония')
 		)
-CATEGORY = (
-	('BT колонка', 'BT колонка'),
-	('BT наушники', 'BT наушники'),
-	('HDMI', 'HDMI'),
-	('PS', 'PS'),
-	('ресивер', 'ресивер'),
-	('адаптер', 'адаптер'),
-	('автомагнитола', 'автомагнитола'),
-	('аккумулятор', 'аккумулятор'),
-	('аксессуары PS', 'аксессуары PS'),
-	('аксессуары для камеры', 'аксессуары для камеры'),
-	('аксессуары для смартфона', 'аксессуары для смартфона'),
-	('аксессуары для ТВ', 'аксессуары для ТВ'),
-	('акустика', 'акустика'),
-	('аудиосистема', 'аудиосистема'),
-	('внешний SSD', 'внешний SSD'),
-	('диктофон', 'диктофон'),
-	('зарядное устройство', 'зарядное устройство'),
-	('защитная пленка', 'защитная пленка'),
-	('защитное стекло', 'защитное стекло'),
-	('игра PS', 'игра PS'),
-	('кабель', 'кабель'),
-	('камера Sony', 'камера Sony'),
-	('карта памяти', 'карта памяти'),
-	('картридер', 'картридер'),
-	('консоль', 'консоль'),
-	('крепление', 'крепление'),
-	('крышка объектива', 'крышка объектива'),
-	('микрофон', 'микрофон'),
-	('наушники', 'наушники'),
-	('объектив Sony', 'объектив Sony'),
-	('объектив Tamron', 'объектив Tamron'),
-	('ПЗУ', 'ПЗУ'),
-	('плеер', 'плеер'),
-	('проигрыватель', 'проигрыватель'),
-	('радионаушники', 'радионаушники'),
-	('ресивер', 'смартфон'),
-	('сабвуфер', 'сабвуфер'),
-	('саундбар', 'саундбар'),
-	('светофильтр', 'светофильтр'),
-	('телевизор', 'телевизор'),
-	('уход за оптикой', 'уход за оптикой'),
-	('чехол', 'чехол'),
-	('штатив', 'штатив'),
-)
 
+class Category(models.Model):
+	title = models.CharField(
+		max_length=30,
+		verbose_name='категория товара',
+		help_text='наушники'
+	)
+
+	class Meta:
+		db_table = 'category'
+		verbose_name = 'категория товара'
+		verbose_name_plural = 'категории товаров'
+
+	def __str__(self):
+		return self.title
+
+class Country(models.Model):
+	title = models.CharField(
+		max_length=30,
+		verbose_name='страна',
+		help_text='Китай'
+	)
+
+	class Meta:
+		db_table = 'country'
+		verbose_name = 'страна производства'
+		verbose_name_plural = 'страны производства'
+
+	def __str__(self):
+		return self.title
 
 class Product(models.Model):
 	sku = models.CharField(
@@ -78,17 +62,16 @@ class Product(models.Model):
 		verbose_name='наименование товара',
 		help_text='IER-M7'
 	)
-	country = models.CharField(
-		max_length=30,
+	country = models.ForeignKey(
+		Country,
+		on_delete=models.CASCADE,
 		verbose_name='страна производства',
-		choices=COUNTRY,
-		default='Вьетнам',
 		help_text='Китай'
 	)
-	category = models.CharField(
-		max_length=30,
+	category = models.ForeignKey(
+		Category,
+		on_delete=models.CASCADE,
 		verbose_name='категория товара',
-		choices=CATEGORY,
 		help_text='наушники'
 	)
 	old_price = models.IntegerField(

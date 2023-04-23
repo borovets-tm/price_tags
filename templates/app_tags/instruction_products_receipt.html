@@ -5,7 +5,7 @@
     <div>
         <div class="wrap">
             <div class="Section-content">
-                <div class="Slider Slider_carousel">
+                <div class="Slider Slider_carousel" style="height: 100%">
                     <header class="Section-header Section-header_close">
                         <h2 class="Section-title">
                             Инструкция по обновлению цен после прихода товара
@@ -15,121 +15,15 @@
                             </div>
                         </div>
                     </header>
-                    <div class="Slider-box Cards">
-
-                        <div class="Slider-item">
-                            <div class="Slider-content">
-                                <div class="Card">
-                                    <strong class="Card-title">
-                                        Шаг 1.
-                                    </strong>
-                                    <img src="{% static 'steps/products_arrival-1.jpg' %}"
-                                         alt="products_arrival-1.jpg"/>
-                                    <div class="Card-content">
-                                        <div class="Card-description">
-                                            <span>Откройте файл с ценами прихода.</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Slider-item">
-                            <div class="Slider-content">
-                                <div class="Card">
-                                    <strong class="Card-title">
-                                        Шаг 2.
-                                    </strong>
-                                    <img src="{% static 'steps/products_arrival-2.jpg' %}"
-                                         alt="products_arrival-2.jpg"/>
-                                    <div class="Card-content">
-                                        <div class="Card-description">
-                                            <span>Выделите заполненные строки и столбцы таблицы и нажмите Ctrl+C</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Slider-item">
-                            <div class="Slider-content">
-                                <div class="Card">
-                                    <strong class="Card-title">
-                                        Шаг 3.
-                                    </strong>
-                                    <img src="{% static 'steps/products_arrival-3.jpg' %}"
-                                         alt="products_arrival-3.jpg"/>
-                                    <div class="Card-content">
-                                        <div class="Card-description">
-                                            <span>Вставьте скопированное содержимое на новый лист. Удалите лист 1 (ПКМ -> Удалить лист)</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Slider-item">
-                            <div class="Slider-content">
-                                <div class="Card">
-                                    <strong class="Card-title">
-                                        Шаг 4.
-                                    </strong>
-                                    <img src="{% static 'steps/products_arrival-4.jpg' %}"
-                                         alt="products_arrival-4.jpg"/>
-                                    <div class="Card-content">
-                                        <div class="Card-description">
-                                                    <span>
-                                                    Если есть столбец со штрихкодами, удалите его и переименуйте столбцы
-                                                    (первая строка) по следующим критериями:<br>
-                                                    1. Item -> sku<br>
-                                                    2. Столбец с ценами -> price<br>
-                                                    3. Столбец с комментариями -> old_price<br>
-                                                    4. Следующий пустой столбец -> is_red_price<br>
-                                                    После этого выделите столбец с ценами, нажмите Ctrl+1. Выберите
-                                                    вкладку "Число", в ней выберите формат "Числовой" и снимите галочку
-                                                    "Разделитель групп разрядов()"<br>
-                                                    Заполните столбцы по следующим правилам:<br>
-                                                    1. old_price - если указана вторая цена, то введите ее, если нет, то
-                                                    поставьте 0. Следите за тем, чтобы 4-х значные цифры имели формат,
-                                                    как на фото, при необходимости повторите шаг выше для данного
-                                                    столбца.<br>
-                                                    2. is_red_price = если ценник красный - 1, если черный - 0
-                                                    </span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Slider-item">
-                            <div class="Slider-content">
-                                <div class="Card">
-                                    <strong class="Card-title">
-                                        Шаг 5.
-                                    </strong>
-                                    <img src="{% static 'steps/products_arrival-5.jpg' %}"
-                                         alt="products_arrival-5.jpg"/>
-                                    <div class="Card-content">
-                                        <div class="Card-description">
-                                            <span>Сохраните файлЖ: Сохранить как -> формат CSV, как на фото</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="Slider-item">
-                            <div class="Slider-content">
-                                <div class="Card">
-                                    <strong class="Card-title">
-                                        Шаг 6.
-                                    </strong>
-                                    <img src="{% static 'steps/products_arrival-6.jpg' %}"
-                                         alt="products_arrival-6.jpg"/>
-                                    <div class="Card-content">
-                                        <div class="Card-description">
-                                            <span>Итоговый файл должен выглядеть вот так. Загрузите файл.</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+					1.
+                    <div class="row">
+                        <img src="{% static 'steps/step1.jpg' %}"
+                             alt="step1" width="90%"/>
                     </div>
+					2.
+                    <div class="row">
+		                <img src="{% static 'steps/step2.jpg' %}" alt="step2" width="90%"/>
+	                </div>
                 </div>
             </div>
         </div>

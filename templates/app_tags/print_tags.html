@@ -54,10 +54,16 @@
 			{% if tags.0 == 'big_sale_tags' %}
 				{% include 'app_tags/big_sale_tags.html' %}
 			{% endif %}
+			{% if tags.0 == 'free_tags_big' %}
+				{% include 'app_tags/big_sale_tags.html' %}
+			{% endif %}
 			{% if tags.0 == 'small_tags' %}
 				{% include 'app_tags/small_tags.html' %}
 			{% endif %}
 			{% if tags.0 == 'small_sale_tags' %}
+				{% include 'app_tags/small_sale_tags.html' %}
+			{% endif %}
+			{% if tags.0 == 'free_tags_small' %}
 				{% include 'app_tags/small_sale_tags.html' %}
 			{% endif %}
 		{% endfor %}

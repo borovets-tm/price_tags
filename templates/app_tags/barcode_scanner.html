@@ -110,12 +110,28 @@
 							</form>
 						</div>
 					</div>
-					<div class="Order-footer">
-						<a class="btn btn_success btn_muted Order-btnReg" style="width: 20%"
+					<div class="Middle-top" style="padding: 10px; margin-bottom: 0">
+			            <div class="wrap" style="padding: 0">
+				            <h6 class="Middle-title" style="margin: 10px">Добавить ценник по уценки (Добавлено: {% if numbers_free_tags > 0 %}{{ numbers_free_tags }}{% else %}0{% endif %})</h6>
+				            <div class="Middle-header">
+				                <form class="row" style="margin-top: 10px; text-align: center" id="free_form" method="post">
+									{% csrf_token %}
+					                {% for field in free_form %}
+						                <div>
+									       {{ field.label_tag }}{{ field }}
+						                </div>
+					                {% endfor %}
+					                <button class="btn" type="submit" style="width: 100px; height: 50px; margin-top: 10px; margin-left: 10px; background-color: #3cb878; border-radius: 0">Добавить</button>
+								</form>
+				            </div>
+			            </div>
+			        </div>
+					<div class="Order-footer" style="min-height: 30px; height: 30px; margin: 0">
+						<a class="btn btn_success btn_muted Order-btnReg" style="width: 20%; margin-top: 10px"
 						   href="{% url 'barcode_scanner' %}">
 							Очистить
 						</a>
-						<a class="btn btn_success Order-btnReg" style="width: 20%" href="{% url 'print_tags' %}"
+						<a class="btn btn_success Order-btnReg" style="width: 20%; margin-top: 10px" href="{% url 'print_tags' %}"
 						   target="_blank">
 							Сформировать
 						</a>
