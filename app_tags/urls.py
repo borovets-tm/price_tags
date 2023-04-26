@@ -2,6 +2,7 @@ from django.urls import path
 
 from app_tags.views import BarcodeScannerView, print_tags, ProductsReceiptView, ProductCreateBeforeUpdateView
 from app_tags.views import AddNewProduct, ProductMultyUpdateView, instruction_products_receipt
+from app_tags.views import instruction_add_products
 
 urlpatterns = [
 	path('', BarcodeScannerView.as_view(), name='barcode_scanner'),
@@ -12,4 +13,5 @@ urlpatterns = [
 	path('update_price/', ProductMultyUpdateView.as_view(), name='update_price'),
 	path('update_price/<int:pk>=<int:color>/', ProductMultyUpdateView.edit_color_price_tags, name='change_color'),
 	path('instruction_products_receipt/', instruction_products_receipt, name='instruction_products_receipt'),
+	path('instruction_add_products/', instruction_add_products, name='instruction_add_products'),
 ]

@@ -940,7 +940,7 @@ select + select {
     width: 100%;
     box-sizing: border-box;
     padding: 5px 25px;
-    border-radius: 0px;
+    border-radius: 0;
     border: 1px solid #e0e0e0;
     font-size: 16px;
     background-color: #f9fafc;
@@ -959,10 +959,8 @@ select + select {
     width: 100%;
     height: 112px;
     box-sizing: border-box;
-    padding: 5px 25px;
-    padding-top: 18px;
-    padding-bottom: 18px;
-    border-radius: 0px;
+    padding: 18px 25px;
+    border-radius: 0;
     border: 1px solid #e0e0e0;
     font-size: 18px;
     background-color: #f9fafc;
@@ -982,7 +980,7 @@ select + select {
     height: 56px;
     box-sizing: border-box;
     padding: 5px 21px;
-    border-radius: 0px;
+    border-radius: 0;
     border: 1px solid #e0e0e0;
     background: #f9fafc;
     background: transparent;
@@ -1002,7 +1000,7 @@ select + select {
 }
 
 .form .form-selectWrap .form-select {
-    padding-right: 0px;
+    padding-right: 0;
 }
 
 .form .form-selectWrap:after {
@@ -1453,7 +1451,7 @@ label.toggle {
 
 @media screen and (max-width: 990px) {
     .menuModal {
-        height: 0px;
+        height: 0;
         display: block;
         transition: 300ms;
         overflow: hidden;
@@ -1504,7 +1502,7 @@ label.toggle {
 .menuTrigger_OPEN span {
     position: absolute;
     top: 31%;
-    margin-top: 0px;
+    margin-top: 0;
     transform: rotate(45deg);
     box-shadow: none;
     transition: all 0.3s;
@@ -1569,8 +1567,8 @@ label.toggle {
     border: none;
     position: relative;
     display: inline-block;
-    padding-left: 0px;
-    padding-right: 0px;
+    padding-left: 0;
+    padding-right: 0;
     padding-bottom: 5px;
 }
 
@@ -1921,7 +1919,7 @@ label.toggle {
     text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
     text-decoration: none;
     font-weight: normal;
-    padding: 0 8px 0px;
+    padding: 0 8px 0;
     letter-spacing: -0.5px;
     line-height: 35px;
 }
@@ -2172,8 +2170,8 @@ label.toggle {
 .range .irs-bar:after {
     content: '';
     position: absolute;
-    left: 0px;
-    right: 0px;
+    left: 0;
+    right: 0;
     top: 0;
     bottom: 0;
     display: block;

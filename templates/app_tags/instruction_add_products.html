@@ -1,0 +1,26 @@
+{% extends 'basic.html' %}
+{% load widget_tweaks %}
+{% load static %}
+{% block page_content %}
+    <div>
+        <div class="wrap">
+            <div class="Section-content">
+                <div class="Slider Slider_carousel" style="height: 100%">
+                    <header class="Section-header Section-header_close">
+                        <h2 class="Section-title">
+                            Инструкция по одновременному добавлению нескольких новых товаров
+                        </h2>
+                        <div class="Section-control">
+                            <div class="Slider-navigate">
+                            </div>
+                        </div>
+                    </header>
+                    <div class="row">
+                        <img src="{% static 'steps/548d480e21.jpg' %}"
+                             alt="step1" width="90%"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

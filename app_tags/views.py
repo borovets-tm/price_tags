@@ -365,6 +365,7 @@ class AddNewProduct(View):
 	def get(cls, request):
 		form = ProductForm()
 		form_file = ProductsReceiptForm()
+		form_file.fields['file'].widget.attrs.pop('style')
 		return render(
 			request,
 			'app_tags/product_form.html',
@@ -378,6 +379,7 @@ class AddNewProduct(View):
 	def post(cls, request):
 		form = ProductForm(request.POST)
 		form_file = ProductsReceiptForm()
+		form_file.fields['file'].widget.attrs.pop('style')
 		if form.is_valid():
 			sku = form.cleaned_data.get('sku')
 			product_check = Product.objects.filter(sku=sku)
@@ -454,6 +456,7 @@ class AddNewProduct(View):
 						)
 			form = ProductForm()
 			form_file = ProductsReceiptForm()
+			form_file.fields['file'].widget.attrs.pop('style')
 			return render(
 				request,
 				'app_tags/product_form.html',
@@ -466,6 +469,7 @@ class AddNewProduct(View):
 			)
 		form = ProductForm()
 		form_file = ProductsReceiptForm()
+		form_file.fields['file'].widget.attrs.pop('style')
 		return render(
 			request,
 			'app_tags/product_form.html',
@@ -550,4 +554,10 @@ def instruction_products_receipt(request):
 	return render(
 		request,
 		'app_tags/instruction_products_receipt.html'
+	)
+
+def instruction_add_products(request):
+	return render(
+		request,
+		'app_tags/instruction_add_products.html'
 	)

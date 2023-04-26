@@ -40,7 +40,7 @@
                             {% else %}
                                 Добавление товаров из файла<br>
 	                            1. Скачайте файл по ссылке: <a href="{% static 'new_product.csv' %}">csv-документ</a><br>
-	                            2. Откройте и заполните файл по образцу
+	                            2. Откройте и заполните файл по образцу: <a href="{% url 'instruction_add_products' %}">Инструкция</a>
                             {% endif %}
                             <form class="form" method="post" enctype="multipart/form-data">
                                 {% csrf_token %}
